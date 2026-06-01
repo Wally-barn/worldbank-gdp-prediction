@@ -1,0 +1,162 @@
+# Predicting GDP per Capita Using World Bank Development Indicators
+
+A machine learning project investigating whether macroeconomic and development indicators can predict cross-country GDP per capita using World Bank World Development Indicators (WDI) data.
+
+
+## Project Objective
+
+This project explores the relationship between national macroeconomic and development indicators and GDP per capita across countries in 2021.
+
+Main questions investigated:
+
+- Which indicators are most strongly associated with GDP per capita?
+- Are these relationships linear or nonlinear?
+- Which machine learning model performs better at prediction?
+
+## Dataset
+
+**Source:** World Bank — World Development Indicators (WDI)
+
+Cross-country dataset (2021) containing development and macroeconomic indicators.
+
+Indicators used:
+
+- GDP per Capita (US$) *(target variable)*
+- Life Expectancy at Birth
+- Individuals Using the Internet (%)
+- Urban Population (%)
+- Trade (% of GDP)
+- Inflation Rate
+- Population Density
+- Population Growth
+- Unemployment Rate
+
+Indicators with very high missingness (such as literacy rate, education expenditure, and Gini index) were excluded from the final analysis.
+
+
+
+## Methodology
+
+### 1. Data Cleaning
+
+The raw WDI export required preprocessing:
+
+- Converted `".."` missing value markers to `NaN`
+- Converted numeric columns from strings to numeric datatypes
+- Removed observations missing target values
+- Applied median imputation for remaining missing numeric values
+
+
+
+### 2. Exploratory Data Analysis (EDA)
+
+Correlation analysis showed several meaningful relationships with GDP per capita.
+
+Strongest correlations with **log-transformed GDP per capita**:
+
+Life expectancy: **0.84**
+Internet Usage: **0.80**
+Urban Population: **0.63**
+Population Growth: **0.52**
+
+
+A logarithmic transformation of GDP per capita substantially improved linear interpretability.
+
+
+
+### 3. Modeling
+
+Two predictive models were tested:
+
+1. **Linear Regression** — baseline model
+2. **Random Forest Regressor** — nonlinear ensemble model
+
+Target variable:
+
+*log(GDP per Capita)*
+
+Train-test split:
+
+- 80% training data
+- 20% testing data
+
+---
+
+## Results
+
+### Model Performance
+
+| Model | R² | MAE | RMSE |
+|------|------|------|------|
+| LR | 0.718 | 0.656 | 0.797 |
+| RF | **0.759** | **0.576** | **0.737** |
+
+Random Forest outperformed Linear Regression across all evaluation metrics, suggesting nonlinear relationships between development indicators and GDP per capita.
+
+---
+
+## Key Findings
+
+- **Life expectancy** emerged as the strongest predictor of GDP per capita.
+- **Internet penetration** was the second strongest predictor.
+- Log-transforming GDP revealed substantially stronger linear relationships.
+- A simplified feature set achieved comparable predictive performance to larger models.
+- Largest prediction errors occurred among **microstates**, **tourism-dependent economies**, and **politically constrained territories**, indicating that standard development indicators do not fully capture all economic structures.
+
+---
+
+## Example Visualizations
+
+
+
+### Actual vs Predicted GDP (Random Forest)
+
+![Actual vs Predicted](figures/random_forest_results.png)
+
+### Life Expectancy vs Log GDP
+
+![Life Expectancy vs Log GDP](figures/log_gdp_per_capita_vs_life_expectancy.png)
+
+---
+
+## Project Structure
+
+```text
+worldbank-gdp-prediction/
+│
+├── data/
+│   └── raw.csv
+│
+├── notebooks/
+│   └── GDP_prediction.ipynb
+│
+├── figures/
+│
+├── README.md
+├── requirements.txt
+└── .gitignore
+```
+
+---
+
+## Future Improvements
+
+Potential extensions include:
+
+- Panel data analysis across multiple years
+- Additional development indicators
+- Gradient Boosting / XGBoost models
+- Country clustering and dimensionality reduction
+- SHAP analysis for model interpretability
+
+---
+
+## Tools & Libraries
+
+Python ecosystem:
+
+- pandas
+- numpy
+- matplotlib
+- scikit-learn
+- Jupyter Notebook
